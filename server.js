@@ -1,6 +1,7 @@
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
+const url = require("url");
 
 // API PATH TO FETCH
 const api = fs.readFileSync(`${__dirname}/dev-data/data.json`, "utf-8");
@@ -21,10 +22,11 @@ function addTemplate(temp, elements){
     output = output.replace(/{%PRICE%}/g, elements.price);
     output = output.replace(/{%LOCATION%}/g, elements.from);
     output = output.replace(/{%ID%}/g, elements.id);
-
+    output = output.replace(/{%DESCRIPTION%}/g, elements.description);
+    
     if(!elements.organic){
         output = output.replace(/{%NOT_ORGANIC%}/g, "not-organic");
-
+        
     }
     return output;
 }
@@ -32,10 +34,10 @@ function addTemplate(temp, elements){
 
 // CREATE A SERVER 
 const server = http.createServer((req, res) => {
-    const pathName = req.url;
-
+    const {query, pathname } = url.parse(req.url, true);
+    
     //  PRODUCT OVERVIEW PAGE
-    if(pathName == "/" || pathName === "/overview"){
+    if(pathname == "/" || pathname === "/overview"){
         res.writeHead(200, {"Content-Type" : "text/html"});
         const htmlCard = dataObj.map(el => addTemplate(card, el)).join("");
 
@@ -44,17 +46,15 @@ const server = http.createServer((req, res) => {
         res.end(output);
     }
     // PRODUCT PAGE
-    else if(pathName === "/product"){
+    else if(pathname === "/product"){
         res.writeHead(200, {"Content-Type" : "text/html"});
-
-        const htmlCard = dataObj.map(el => addTemplate(card, el)).join("");
-
-        const output = template.replace('{%PRODUCTCARD%}', htmlCard);
-
+        const product = dataObj[query.id];
+        const output = addTemplate(template, product)
         res.end(output);
     }else {
         res.writeHead(200, {"Content-Type" : "text/html"});
         res.end("<h1>THIS IS A 404 PAGE</h1>");
+        console.log(query, pathname);
     }
 });
 
