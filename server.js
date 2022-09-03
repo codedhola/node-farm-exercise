@@ -2,6 +2,7 @@ const http = require("http");
 const fs = require("fs");
 const path = require("path");
 const url = require("url");
+const addTemplate = require("./addTemplate")
 
 // API PATH TO FETCH
 const api = fs.readFileSync(`${__dirname}/dev-data/data.json`, "utf-8");
@@ -14,22 +15,7 @@ const template = fs.readFileSync(`${__dirname}/templates/product-template.html`,
 const dataObj = JSON.parse(api);
 
 
-function addTemplate(temp, elements){
-    let output = temp.replace(/{%PRODUCTNAME%}/g, elements.productName);
-    output = output.replace(/{%NUTRIENT%}/g, elements.nutrients);
-    output = output.replace(/{%QUANTITY%}/g, elements.quantity);
-    output = output.replace(/{%IMAGE%}/g, elements.image);
-    output = output.replace(/{%PRICE%}/g, elements.price);
-    output = output.replace(/{%LOCATION%}/g, elements.from);
-    output = output.replace(/{%ID%}/g, elements.id);
-    output = output.replace(/{%DESCRIPTION%}/g, elements.description);
-    
-    if(!elements.organic){
-        output = output.replace(/{%NOT_ORGANIC%}/g, "not-organic");
-        
-    }
-    return output;
-}
+
 
 
 // CREATE A SERVER 
@@ -54,7 +40,6 @@ const server = http.createServer((req, res) => {
     }else {
         res.writeHead(200, {"Content-Type" : "text/html"});
         res.end("<h1>THIS IS A 404 PAGE</h1>");
-        console.log(query, pathname);
     }
 });
 
