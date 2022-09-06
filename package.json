@@ -1,0 +1,24 @@
+{
+  "name": "node-farm",
+  "version": "1.0.0",
+  "description": "A farm app based on nodejs",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codedhola/node-farm-exercise.git"
+  },
+  "keywords": [
+    "nodejs",
+    "backend"
+  ],
+  "author": "coded hola",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/codedhola/node-farm-exercise/issues"
+  },
+  "homepage": "https://github.com/codedhola/node-farm-exercise#readme"
+}
